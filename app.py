@@ -23,28 +23,28 @@ def send_telegram(message):
 def check_prices():
     print("Checking prices...")
 
-    for ticker in TICKERS:
-        try:
-            data = yf.Ticker(ticker)
-            history = data.history(period="1d", interval="1m")
+    try:
+        data = yf.download(
+            tickers=TICKERS,
+            period="1d",
+            interval="1m",
+            group_by="ticker",
+            threads=True
+        )
 
-            if history.empty:
-                continue
+        for ticker in TICKERS:
+            try:
+                price = data[ticker]["Close"].iloc[-1]
 
-            price = history["Close"].iloc[-1]
+                msg = f"📊 {ticker}: ${price:.2f}"
+                send_telegram(msg)
 
-            if ticker in previous_prices:
-                old_price = previous_prices[ticker]
-                change = ((price - old_price) / old_price) * 100
+            except Exception as e:
+                print(f"Error with {ticker}: {e}")
 
-                if change <= THRESHOLD:
-                    msg = f"🔻 {ticker} dropped {change:.2f}%\nPrice: ${price:.2f}"
-                    send_telegram(msg)
-
-            previous_prices[ticker] = price
-
-        except Exception as e:
-            print(f"Error with {ticker}: {e}")
+    except Exception as e:
+        print("Download error:", e)
+``
 
 
 if __name__ == "__main__":
