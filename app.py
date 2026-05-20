@@ -48,7 +48,7 @@ def check_prices():
 
 
 if __name__ == "__main__":
-    while True:
+    
         import requests
 import yfinance as yf
 import os
