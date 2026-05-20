@@ -1,11 +1,21 @@
+import requests
 import os
 
-print("✅ SCRIPT STARTED")
+print("START ✅")
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-CHAT_ID = os.environ.get("CHAT_ID")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 
-print("Token exists:", BOT_TOKEN is not None)
-print("Chat ID exists:", CHAT_ID is not None)
+url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
-print("✅ SCRIPT FINISHED")
+response = requests.post(
+    url,
+    data={
+        "chat_id": CHAT_ID,
+        "text": "Hello ✅"
+    },
+    timeout=10
+)
+
+print("Telegram status:", response.status_code)
+print("END ✅")
