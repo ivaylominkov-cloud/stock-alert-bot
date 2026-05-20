@@ -6,17 +6,8 @@ on:
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+    timeout-minutes: 2   # ✅ prevents hanging
 
     steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - run: pip install requests
-
-      - run: python app.py
-        env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
+      - run: echo "Starting..."
+      - run: python --version
